@@ -1,0 +1,33 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-todolistamplify-dev-150821-authRole",
+      "UnauthRoleArn": "arn:aws:iam::404306151992:role/amplify-todolistamplify-dev-150821-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::404306151992:role/amplify-todolistamplify-dev-150821-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-todolistamplify-dev-150821-deployment",
+      "UnauthRoleName": "amplify-todolistamplify-dev-150821-unauthRole",
+      "StackName": "amplify-todolistamplify-dev-150821",
+      "StackId": "arn:aws:cloudformation:us-east-1:404306151992:stack/amplify-todolistamplify-dev-150821/0c1d5e10-ae3e-11ed-bee5-0a3d33b1541d",
+      "AmplifyAppId": "d3r05fs3b8bedz"
+    }
+  },
+  "newenv": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-todolistamplify-newenv-155352-authRole",
+      "UnauthRoleArn": "arn:aws:iam::404306151992:role/amplify-todolistamplify-newenv-155352-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::404306151992:role/amplify-todolistamplify-newenv-155352-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-todolistamplify-newenv-155352-deployment",
+      "UnauthRoleName": "amplify-todolistamplify-newenv-155352-unauthRole",
+      "StackName": "amplify-todolistamplify-newenv-155352",
+      "StackId": "arn:aws:cloudformation:us-east-1:404306151992:stack/amplify-todolistamplify-newenv-155352/67b333c0-ae44-11ed-a849-0abdadd99453",
+      "AmplifyAppId": "d3r05fs3b8bedz"
+    },
+    "categories": {
+      "api": {
+        "todolistamplify": {}
+      }
+    }
+  }
+}
