@@ -7,4 +7,13 @@ type Todo @model {
   name: String!
   description: String
   isFinished: Boolean
+  todoID: ID! @index(name: "byTodo", sortKeyFields: ["name"])
+  category: Category! @belongsTo(fields: ["id"])
+}
+
+
+type Category @model {
+  id: ID!
+  name: String!
+  todo: [Todo] @hasMany(indexName: "byTodo", fields: ["id"])
 }

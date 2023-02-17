@@ -9,12 +9,12 @@
     },
     "conflictResolution": {
       "defaultResolutionStrategy": {
-        "type": "AUTOMERGE"
+        "type": "OPTIMISTIC_CONCURRENCY"
       },
       "perModelResolutionStrategy": [
         {
           "resolutionStrategy": {
-            "type": "AUTOMERGE"
+            "type": "OPTIMISTIC_CONCURRENCY"
           },
           "entityName": "Todo"
         }
