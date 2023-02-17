@@ -27,6 +27,15 @@
     "categories": {
       "api": {
         "todolistamplify": {}
+      },
+      "auth": {
+        "todolistamplifyd9fd7ad7": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3r05fs3b8bedz",
+          "type": "manual"
+        }
       }
     }
   }
