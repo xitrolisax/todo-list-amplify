@@ -14,7 +14,8 @@ const initCategories = { name: '' }
 const App = ({ signOut, user }) => { 
   const [formState, setFormState] = useState(initialState)
   const [todos, setTodos] = useState([])
-
+  const [filteredByFin, setFilteredByFin] = useState('all')
+  const [filteredByCategory, setFilteredByCategory] = useState('all')
   const [categoryState, setCategoryState] = useState(initCategories)
   const [categories, setCategories] = useState([])
  
@@ -195,7 +196,8 @@ const App = ({ signOut, user }) => {
   <SelectField
       label="Sort"
       labelHidden
-      onChange={e => sortList(e.target.value)}
+      value={filteredByFin}
+      onChange={e => {sortList(e.target.value); setFilteredByFin(e.target.value); setFilteredByCategory('all')}}
     >
        <option value="all">Show All</option>
       <option value="finished">Finished</option>
@@ -206,7 +208,8 @@ const App = ({ signOut, user }) => {
           <SelectField
             label="Sort By Category"
             labelHidden
-            onChange={e => sortListByCategories(e.target.value)}
+            value={filteredByCategory}
+            onChange={e => {sortListByCategories(e.target.value);setFilteredByFin('all'); setFilteredByCategory(e.target.value)}}
           >
             <option value="all">Show All</option>
             {
