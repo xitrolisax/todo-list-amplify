@@ -7,13 +7,14 @@ type Todo @model {
   name: String!
   description: String
   isFinished: Boolean
-  todoID: ID! @index(name: "byTodo", sortKeyFields: ["name"])
-  category: Category! @belongsTo(fields: ["id"])
+  categoryID: ID! @index(name: "byCategory", sortKeyFields: ["id"])
+  category: Category! @belongsTo(fields: ["categoryID"]) 
+  categoryName: String
 }
 
 
 type Category @model {
   id: ID!
   name: String!
-  todo: [Todo] @hasMany(indexName: "byTodo", fields: ["id"])
+  todo: [Todo] @hasMany(indexName: "byCategory", fields: ["id"])
 }

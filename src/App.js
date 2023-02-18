@@ -3,17 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { Amplify} from "@aws-amplify/core";
 import '@aws-amplify/ui-react/styles.css'
 import awsExports from "./aws-exports"
-import { withAuthenticator, Button, Heading, Text, TextField, View, CheckboxField, SelectField } from '@aws-amplify/ui-react';
-import Styles from './index.scss'
+import { withAuthenticator, Button, Heading, Text, TextField, View, CheckboxField, SelectField, Card, Flex } from '@aws-amplify/ui-react';
 import { DataStore, Predicates, syncExpression } from "@aws-amplify/datastore";
 import { Todo, Category } from './models' 
-
 Amplify.configure(awsExports); 
 
-
-
 const initialState = { name: '', description: '', isFinished: false }
-const initCategories = {name:''}
+const initCategories = { name: '' }
 
 const App = ({ signOut, user }) => { 
   const [formState, setFormState] = useState(initialState)
@@ -23,8 +19,14 @@ const App = ({ signOut, user }) => {
   const [categories, setCategories] = useState([])
  
   useEffect(() => {
-    fetchTodos() 
-    fetchCategories()
+    const subsTodo = DataStore.observeQuery(Todo).subscribe(snapshot => {
+      const { items } = snapshot
+      setTodos(items)
+    });
+    const subsCategory = DataStore.observeQuery(Category).subscribe(snapshot => {
+      const { items } = snapshot
+      setCategories(items)
+    });
   }, [])
 
   function setInput(key, value) {
@@ -39,17 +41,7 @@ const App = ({ signOut, user }) => {
       setTodos(todos)
     } catch (err) { console.log('error fetching todos') }
     
-  }
-  async function fetchCategories() {
-   
-    try {
-      const categories = await DataStore.query(Category);
-      setCategories(categories)
-    } catch (err) { console.log('error fetching categories') }
-    
-  }
- 
- 
+  } 
   
   async function updatedTodo(id, value) { 
     const original = await DataStore.query(Todo, id);
@@ -63,7 +55,7 @@ const App = ({ signOut, user }) => {
     catch (err) { 
       console.log(err);
     } 
-    fetchTodos();
+   
   }
 
   async function removeToDo(todo) {
@@ -74,7 +66,9 @@ const App = ({ signOut, user }) => {
     catch (error) {
       console.log(error);
     }
+  
   }
+
   async function sortList(param) {
     if (param == 'all') {
       fetchTodos();
@@ -94,10 +88,18 @@ const App = ({ signOut, user }) => {
   }
 
   async function sortListByCategories(param) {
+    if (param == 'all') {
+      try {
+        const todos = await DataStore.query(Todo);
+        setTodos(todos)
+      } catch (err) { console.log('error fetching todos') }
+    }
+    else {
     try {
-      const todos = await DataStore.query(Todo, c => c.category.eq(param.id));
+      const todos = await DataStore.query(Todo, c => c.categoryName.eq(param));
       setTodos(todos)
     } catch (err) { console.log('error fetching todos') }
+  }
   }
 
   async function addTodo() {
@@ -110,11 +112,13 @@ const App = ({ signOut, user }) => {
         new Todo(todo) 
       );
       setFormState(initialState);
+      setCategoryState(initCategories);
     } catch (error) {
       console.log(error);
     }
-    
+   
   }
+
   async function addCategory() {
     try {
       if (!categoryState.name) return
@@ -130,31 +134,34 @@ const App = ({ signOut, user }) => {
   }
 
   return (
-    <View style={Styles.container}>
+    <Flex direction="column" gap="m"> 
+  <Flex>
+  <Heading level={2}>Hello, {user.username}!</Heading>
+  <Button variation="primary" onClick={signOut}>Sign out</Button>
+  </Flex> 
   <View>
-  <Heading level={1}>Hello, {user.username}!</Heading>
-  <Button style={Styles.button}onClick={signOut}>Sign out</Button>
-  </View>
-  <View>
-  <Heading level={2}>Amplify Todos</Heading>
+ 
+  <Flex width='100%' direction="row" gap="xs" justifyContent='flex-start' alignItems='flex-start'>
+  <Card width='100%' variation="elevated">
+  <Heading level={4}>Add a todo</Heading>
+  <Flex direction="column" gap="xs">
   <TextField
     placeholder="Name"
     onChange={e => setInput('name', e.target.value)}
-    style={Styles.input}
     defaultValue={formState.name}
   />
   <TextField
     placeholder="Description"
     onChange={e => setInput('description', e.target.value)}
-    style={Styles.input}
     defaultValue={formState.description}
   />
 {categories.length > 0 ? (
           <SelectField
             label="Category"
             labelHidden
-            onChange={e => setInput('category', e.target.value)}
-          >{
+            onChange={e => setInput('categoryName', e.target.value)}
+          >
+            <option value=''>- - -</option>{
             categories.map((category, index) => (
             <option key={index} value={category.name}>{category.name}</option>
             ))
@@ -162,16 +169,24 @@ const App = ({ signOut, user }) => {
           </SelectField>
         
         ):(<></>)}
-  <Button style={Styles.button} onClick={addTodo}>Create Todo</Button>
-
+  <Button variation="primary" onClick={addTodo}>Create Todo</Button>
+  </Flex>
+  </Card>
+  <Card width='100%' maxWidth='400px' variation="elevated">
+  <Heading level={4}>Add new category</Heading>
+  <Flex direction="column" gap="xs" justifyContent='flex-start'>
   <TextField
     placeholder="Category"
     onChange={e => setCategoryState({name: e.target.value})}
-    style={Styles.input}
     defaultValue={categoryState.name}
   />
-  <Button style={Styles.button} onClick={addCategory}>Create Category</Button>
+  <Button variation="primary" onClick={addCategory}>Create Category</Button>
+  </Flex>
+  </Card> 
+  </Flex>
   </View>
+
+  <Flex justifyContent='flex-end'>
   <SelectField
       label="Sort"
       labelHidden
@@ -187,37 +202,41 @@ const App = ({ signOut, user }) => {
             label="Sort By Category"
             labelHidden
             onChange={e => sortListByCategories(e.target.value)}
-          >{
+          >
+            <option value="all">Show All</option>
+            {
             categories.map((category, index) => (
-            <option key={index} value={category}>{category.name}</option>
+            <option key={index} value={category.name}>{category.name}</option>
             ))
           }
           </SelectField>
         
         ):(<></>)}
-  <View>
+        </Flex>
+<Flex direction="column" gap="s">
   {
     todos.map((todo, index) => (
-      <View key={todo.id ? todo.id : index} style={Styles.todo}>
-        <View>
+      <View key={todo.id ? todo.id : index} >
+        <Flex direction="row" gap="xs" justifyContent='flex-start' alignItems='center'>
+      
          <CheckboxField
           name="isCompleted"
           value="yes"
           checked={todo.isFinished === true ? (true):(false)}
           onChange={e => updatedTodo(todo.id, e.target.checked)}
         />
-        <Text style={Styles.todoName}>{todo.name}</Text>
-        <Text style={Styles.todoDescription}>{todo.description}</Text>
-        <Text style={Styles.todoDescription}>{todo.category}</Text>
-        <Button style={Styles.button} onClick={() => removeToDo(todo)}>Delete</Button>
-        </View>
-        
+        <Text>{todo.name}</Text>
+        <Text>{todo.description}</Text>
+        <Text>{todo.categoryName}</Text>
+        <Button onClick={() => removeToDo(todo)}>Delete</Button>
+      
+        </Flex>
       </View>
       
     ))
   }
-  </View>
-</View>
+  </Flex>
+</Flex>
   )
 }
 

@@ -31,8 +31,8 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "todoID": {
-                    "name": "todoID",
+                "categoryID": {
+                    "name": "categoryID",
                     "isArray": false,
                     "type": "ID",
                     "isRequired": true,
@@ -49,9 +49,16 @@ export const schema = {
                     "association": {
                         "connectionType": "BELONGS_TO",
                         "targetNames": [
-                            "id"
+                            "categoryID"
                         ]
                     }
+                },
+                "categoryName": {
+                    "name": "categoryName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -80,10 +87,10 @@ export const schema = {
                 {
                     "type": "key",
                     "properties": {
-                        "name": "byTodo",
+                        "name": "byCategory",
                         "fields": [
-                            "todoID",
-                            "name"
+                            "categoryID",
+                            "id"
                         ]
                     }
                 }
@@ -118,7 +125,7 @@ export const schema = {
                     "association": {
                         "connectionType": "HAS_MANY",
                         "associatedWith": [
-                            "todoID"
+                            "category"
                         ]
                     }
                 },
@@ -152,5 +159,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.5",
-    "version": "573408e7a262099e4096c92da5e80a20"
+    "version": "7407463ed4db518c6944aea91591d6b7"
 };

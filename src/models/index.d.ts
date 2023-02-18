@@ -15,8 +15,9 @@ type EagerTodo = {
   readonly name: string;
   readonly description?: string | null;
   readonly isFinished?: boolean | null;
-  readonly todoID: string;
+  readonly categoryID: string;
   readonly category: Category;
+  readonly categoryName?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -30,8 +31,9 @@ type LazyTodo = {
   readonly name: string;
   readonly description?: string | null;
   readonly isFinished?: boolean | null;
-  readonly todoID: string;
+  readonly categoryID: string;
   readonly category: AsyncItem<Category>;
+  readonly categoryName?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -8,7 +8,7 @@ export const getTodo = /* GraphQL */ `
       name
       description
       isFinished
-      todoID
+      categoryID
       category {
         id
         name
@@ -18,6 +18,7 @@ export const getTodo = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
+      categoryName
       createdAt
       updatedAt
       _version
@@ -38,7 +39,8 @@ export const listTodos = /* GraphQL */ `
         name
         description
         isFinished
-        todoID
+        categoryID
+        categoryName
         createdAt
         updatedAt
         _version
@@ -68,7 +70,8 @@ export const syncTodos = /* GraphQL */ `
         name
         description
         isFinished
-        todoID
+        categoryID
+        categoryName
         createdAt
         updatedAt
         _version
@@ -145,18 +148,18 @@ export const syncCategories = /* GraphQL */ `
     }
   }
 `;
-export const todosByTodoIDAndName = /* GraphQL */ `
-  query TodosByTodoIDAndName(
-    $todoID: ID!
-    $name: ModelStringKeyConditionInput
+export const todosByCategoryIDAndId = /* GraphQL */ `
+  query TodosByCategoryIDAndId(
+    $categoryID: ID!
+    $id: ModelIDKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelTodoFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    todosByTodoIDAndName(
-      todoID: $todoID
-      name: $name
+    todosByCategoryIDAndId(
+      categoryID: $categoryID
+      id: $id
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -167,7 +170,8 @@ export const todosByTodoIDAndName = /* GraphQL */ `
         name
         description
         isFinished
-        todoID
+        categoryID
+        categoryName
         createdAt
         updatedAt
         _version
