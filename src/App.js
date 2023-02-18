@@ -70,8 +70,12 @@ const App = ({ signOut, user }) => {
   }
 
   async function sortList(param) {
+    
     if (param == 'all') {
-      fetchTodos();
+      try {
+        const todos = await DataStore.query(Todo);
+        setTodos(todos)
+      } catch (err) { console.log('error fetching todos') }
     }
     else if (param == 'finished') {
       try {
@@ -88,6 +92,7 @@ const App = ({ signOut, user }) => {
   }
 
   async function sortListByCategories(param) {
+   
     if (param == 'all') {
       try {
         const todos = await DataStore.query(Todo);
@@ -134,15 +139,15 @@ const App = ({ signOut, user }) => {
   }
 
   return (
-    <Flex direction="column" gap="m"> 
-  <Flex>
-  <Heading level={2}>Hello, {user.username}!</Heading>
+    <Flex direction="column" gap="m" wrap='wrap'> 
+  <Flex direction="row" gap="xs" wrap='wrap'>
+  <Heading level={3}>Hello, {user.username}!</Heading>
   <Button variation="primary" onClick={signOut}>Sign out</Button>
   </Flex> 
   <View>
  
-  <Flex width='100%' direction="row" gap="xs" justifyContent='flex-start' alignItems='flex-start'>
-  <Card width='100%' variation="elevated">
+  <Flex wrap='wrap' width='100%' direction="row" gap="m" justifyContent='flex-start' alignItems='flex-start'>
+  <Card width='100%' maxWidth='1000px' variation="elevated">
   <Heading level={4}>Add a todo</Heading>
   <Flex direction="column" gap="xs">
   <TextField
