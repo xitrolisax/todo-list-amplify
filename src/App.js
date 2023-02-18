@@ -34,15 +34,6 @@ const App = ({ signOut, user }) => {
     setFormState({ ...formState, [key]: value })
   }
 
-
-  async function fetchTodos() {
-   
-    try {
-      const todos = await DataStore.query(Todo);
-      setTodos(todos)
-    } catch (err) { console.log('error fetching todos') }
-    
-  } 
   
   async function updatedTodo(id, value) { 
     const original = await DataStore.query(Todo, id);
