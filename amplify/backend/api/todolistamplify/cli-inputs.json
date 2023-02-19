@@ -17,6 +17,12 @@
             "type": "OPTIMISTIC_CONCURRENCY"
           },
           "entityName": "Todo"
+        },
+        {
+          "resolutionStrategy": {
+            "type": "OPTIMISTIC_CONCURRENCY"
+          },
+          "entityName": "Category"
         }
       ]
     }

@@ -10,7 +10,7 @@ export const createTodo = /* GraphQL */ `
       id
       name
       description
-      isFinished
+      status
       categoryID
       category {
         id
@@ -21,7 +21,6 @@ export const createTodo = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      categoryName
       createdAt
       updatedAt
       _version
@@ -39,7 +38,7 @@ export const updateTodo = /* GraphQL */ `
       id
       name
       description
-      isFinished
+      status
       categoryID
       category {
         id
@@ -50,7 +49,6 @@ export const updateTodo = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      categoryName
       createdAt
       updatedAt
       _version
@@ -68,7 +66,7 @@ export const deleteTodo = /* GraphQL */ `
       id
       name
       description
-      isFinished
+      status
       categoryID
       category {
         id
@@ -79,7 +77,6 @@ export const deleteTodo = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      categoryName
       createdAt
       updatedAt
       _version

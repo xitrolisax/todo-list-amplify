@@ -8,7 +8,7 @@ import { DataStore, Predicates, syncExpression } from "@aws-amplify/datastore";
 import { Todo, Category } from './models' 
 Amplify.configure(awsExports); 
 
-const initialState = { name: '', description: '', isFinished: false }
+const initialState = { name: '', description: '', status: 'UNFINISHED', categoryID: '' }
 const initCategories = { name: '' }
 
 const App = ({ signOut, user }) => { 
@@ -27,11 +27,14 @@ const App = ({ signOut, user }) => {
     const subsCategory = DataStore.observeQuery(Category).subscribe(snapshot => {
       const { items } = snapshot
       setCategories(items)
+      console.log(items)
     });
+   
   }, [])
 
   function setInput(key, value) {
-    setFormState({ ...formState, [key]: value })
+    setFormState({...formState, [key]: value})
+    console.log({ ...formState, [key]: value })
   }
 
   
@@ -40,7 +43,7 @@ const App = ({ signOut, user }) => {
     try {
       await DataStore.save(
         Todo.copyOf(original, (updated) => {
-          updated.isFinished = value
+          updated.status = value
         })
         )
     }
@@ -69,22 +72,15 @@ const App = ({ signOut, user }) => {
         setTodos(todos)
       } catch (err) { console.log('error fetching todos') }
     }
-    else if (param == 'finished') {
+    else  {
       try {
-        const todos = await DataStore.query(Todo, c => c.isFinished.eq(true));
-        setTodos(todos)
-      } catch (err) { console.log('error fetching todos') }
-    }
-    else if (param == 'notfinished') {
-      try {
-        const todos = await DataStore.query(Todo, c => c.isFinished.eq(false));
+        const todos = await DataStore.query(Todo, c => c.status.eq(param));
         setTodos(todos)
       } catch (err) { console.log('error fetching todos') }
     }
   }
 
   async function sortListByCategories(param) {
-   
     if (param == 'all') {
       try {
         const todos = await DataStore.query(Todo);
@@ -93,29 +89,48 @@ const App = ({ signOut, user }) => {
     }
     else {
     try {
-      const todos = await DataStore.query(Todo, c => c.categoryName.eq(param));
+      const todos = await DataStore.query(Todo, c => c.categoryID.eq(param));
       setTodos(todos)
     } catch (err) { console.log('error fetching todos') }
   }
   }
-
+  
   async function addTodo() {
-    setInput('isFinished', false)
-    try {
+    if (!formState.categoryID) return
+    const category = await DataStore.query(Category, formState.categoryID);
+   
+    let newTodo;
+
+    try { 
       if (!formState.name || !formState.description) return
       const todo = { ...formState }
+     
       setTodos([...todos, todo])
-      await DataStore.save(
+      
+      newTodo = await DataStore.save(
         new Todo(todo) 
       );
-      setFormState(initialState);
-      setCategoryState(initCategories);
     } catch (error) {
       console.log(error);
     }
-   
-  }
 
+    try { 
+      if (!formState.categoryID) return
+      await DataStore.save(
+        Category.copyOf(category, (updated) => {
+          updated.todo = newTodo
+        })
+      )
+    }
+    catch(e) {
+        console.log(e)
+      }
+    
+    setFormState(initialState);
+    setCategoryState(initCategories);
+    
+  }
+  
   async function addCategory() {
     try {
       if (!categoryState.name) return
@@ -156,13 +171,13 @@ const App = ({ signOut, user }) => {
           <SelectField
             label="Category"
             labelHidden
-            onChange={e => setInput('categoryName', e.target.value)}
+            onChange={e => setInput('categoryID', e.target.value)}
           >
-            <option value=''>- - -</option>{
+            <option id='' value=''>- - -</option>{
             categories.map((category, index) => (
-            <option key={index} value={category.name}>{category.name}</option>
+            <option key={index} id={category.name} value={category.id}>{category.name}</option>
             ))
-          }
+          } 
           </SelectField>
         
         ):(<></>)}
@@ -191,8 +206,8 @@ const App = ({ signOut, user }) => {
       onChange={e => {sortList(e.target.value); setFilteredByFin(e.target.value); setFilteredByCategory('all')}}
     >
        <option value="all">Show All</option>
-      <option value="finished">Finished</option>
-      <option value="notfinished">Not Finished</option>
+      <option value="FINISHED">Finished</option>
+      <option value="UNFINISHED">Not Finished</option>
     </SelectField>
 
     {categories.length > 0 ? (
@@ -205,7 +220,7 @@ const App = ({ signOut, user }) => {
             <option value="all">Show All</option>
             {
             categories.map((category, index) => (
-            <option key={index} value={category.name}>{category.name}</option>
+            <option key={index} value={category.id}>{category.name}</option>
             ))
           }
           </SelectField>
@@ -220,13 +235,12 @@ const App = ({ signOut, user }) => {
       
          <CheckboxField
           name="isCompleted"
-          value="yes"
-          checked={todo.isFinished === true ? (true):(false)}
-          onChange={e => updatedTodo(todo.id, e.target.checked)}
+          value={todo.status == 'FINISHED' ? ('UNFINISHED'):('FINISHED')}
+          checked={todo.status == 'FINISHED' ? (true):(false)}
+          onChange={e => updatedTodo(todo.id, e.target.value)}
         />
         <Text>{todo.name}</Text>
         <Text>{todo.description}</Text>
-        <Text>{todo.categoryName}</Text>
         <Button onClick={() => removeToDo(todo)}>Delete</Button>
       
         </Flex>
@@ -235,6 +249,9 @@ const App = ({ signOut, user }) => {
     ))
   }
   </Flex>
+
+
+  
 </Flex>
   )
 }

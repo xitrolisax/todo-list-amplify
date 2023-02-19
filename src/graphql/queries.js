@@ -7,7 +7,7 @@ export const getTodo = /* GraphQL */ `
       id
       name
       description
-      isFinished
+      status
       categoryID
       category {
         id
@@ -18,7 +18,6 @@ export const getTodo = /* GraphQL */ `
         _deleted
         _lastChangedAt
       }
-      categoryName
       createdAt
       updatedAt
       _version
@@ -38,9 +37,8 @@ export const listTodos = /* GraphQL */ `
         id
         name
         description
-        isFinished
+        status
         categoryID
-        categoryName
         createdAt
         updatedAt
         _version
@@ -69,9 +67,8 @@ export const syncTodos = /* GraphQL */ `
         id
         name
         description
-        isFinished
+        status
         categoryID
-        categoryName
         createdAt
         updatedAt
         _version
@@ -169,9 +166,8 @@ export const todosByCategoryIDAndId = /* GraphQL */ `
         id
         name
         description
-        isFinished
+        status
         categoryID
-        categoryName
         createdAt
         updatedAt
         _version

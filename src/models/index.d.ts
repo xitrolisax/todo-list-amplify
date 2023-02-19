@@ -2,7 +2,10 @@ import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled, AsyncItem, AsyncCollection } from "@aws-amplify/datastore";
 
-
+export enum TodoStatus {
+  FINISHED = "FINISHED",
+  UNFINISHED = "UNFINISHED"
+}
 
 
 
@@ -14,10 +17,9 @@ type EagerTodo = {
   readonly id: string;
   readonly name: string;
   readonly description?: string | null;
-  readonly isFinished?: boolean | null;
+  readonly status: TodoStatus | keyof typeof TodoStatus;
   readonly categoryID: string;
   readonly category: Category;
-  readonly categoryName?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -30,10 +32,9 @@ type LazyTodo = {
   readonly id: string;
   readonly name: string;
   readonly description?: string | null;
-  readonly isFinished?: boolean | null;
+  readonly status: TodoStatus | keyof typeof TodoStatus;
   readonly categoryID: string;
   readonly category: AsyncItem<Category>;
-  readonly categoryName?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -24,11 +24,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "isFinished": {
-                    "name": "isFinished",
+                "status": {
+                    "name": "status",
                     "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
+                    "type": {
+                        "enum": "TodoStatus"
+                    },
+                    "isRequired": true,
                     "attributes": []
                 },
                 "categoryID": {
@@ -52,13 +54,6 @@ export const schema = {
                             "categoryID"
                         ]
                     }
-                },
-                "categoryName": {
-                    "name": "categoryName",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -156,8 +151,16 @@ export const schema = {
             ]
         }
     },
-    "enums": {},
+    "enums": {
+        "TodoStatus": {
+            "name": "TodoStatus",
+            "values": [
+                "FINISHED",
+                "UNFINISHED"
+            ]
+        }
+    },
     "nonModels": {},
     "codegenVersion": "3.3.5",
-    "version": "7407463ed4db518c6944aea91591d6b7"
+    "version": "98dbeb18951789e8dd8603b1ff92242b"
 };

@@ -10,6 +10,10 @@
             "Todo": {
                 "ConflictHandler": "OPTIMISTIC_CONCURRENCY",
                 "ConflictDetection": "VERSION"
+            },
+            "Category": {
+                "ConflictHandler": "OPTIMISTIC_CONCURRENCY",
+                "ConflictDetection": "VERSION"
             }
         }
     }
