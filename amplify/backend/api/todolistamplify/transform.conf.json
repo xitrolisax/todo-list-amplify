@@ -7,7 +7,7 @@
             "ConflictDetection": "VERSION"
         },
         "models": {
-            "Todo": {
+            "TodoItem": {
                 "ConflictHandler": "OPTIMISTIC_CONCURRENCY",
                 "ConflictDetection": "VERSION"
             },

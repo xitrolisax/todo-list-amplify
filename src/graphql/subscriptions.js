@@ -1,9 +1,9 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateTodo = /* GraphQL */ `
-  subscription OnCreateTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onCreateTodo(filter: $filter) {
+export const onCreateTodoItem = /* GraphQL */ `
+  subscription OnCreateTodoItem($filter: ModelSubscriptionTodoItemFilterInput) {
+    onCreateTodoItem(filter: $filter) {
       id
       name
       description
@@ -26,9 +26,9 @@ export const onCreateTodo = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateTodo = /* GraphQL */ `
-  subscription OnUpdateTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onUpdateTodo(filter: $filter) {
+export const onUpdateTodoItem = /* GraphQL */ `
+  subscription OnUpdateTodoItem($filter: ModelSubscriptionTodoItemFilterInput) {
+    onUpdateTodoItem(filter: $filter) {
       id
       name
       description
@@ -51,9 +51,9 @@ export const onUpdateTodo = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteTodo = /* GraphQL */ `
-  subscription OnDeleteTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onDeleteTodo(filter: $filter) {
+export const onDeleteTodoItem = /* GraphQL */ `
+  subscription OnDeleteTodoItem($filter: ModelSubscriptionTodoItemFilterInput) {
+    onDeleteTodoItem(filter: $filter) {
       id
       name
       description

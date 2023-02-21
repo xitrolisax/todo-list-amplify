@@ -5,7 +5,7 @@ import '@aws-amplify/ui-react/styles.css'
 import awsExports from "./aws-exports"
 import { withAuthenticator, Button, Heading, Text, TextField, View, CheckboxField, SelectField, Card, Flex } from '@aws-amplify/ui-react';
 import { DataStore, Predicates, syncExpression } from "@aws-amplify/datastore";
-import { Todo, Category } from './models' 
+import { TodoItem, Category } from './models' 
 Amplify.configure(awsExports); 
 
 const initialState = { name: '', description: '', status: 'UNFINISHED', categoryID: '' }
@@ -18,31 +18,40 @@ const App = ({ signOut, user }) => {
   const [filteredByCategory, setFilteredByCategory] = useState('all')
   const [categoryState, setCategoryState] = useState(initCategories)
   const [categories, setCategories] = useState([])
- 
+  const [categoryDropdown, setDropdown] = useState('- - -');
   useEffect(() => {
-    const subsTodo = DataStore.observeQuery(Todo).subscribe(snapshot => {
+   
+    const subsTodo = DataStore.observeQuery(TodoItem).subscribe(snapshot => {
       const { items } = snapshot
       setTodos(items)
+      
     });
     const subsCategory = DataStore.observeQuery(Category).subscribe(snapshot => {
       const { items } = snapshot
       setCategories(items)
       console.log(items)
-    });
+  
+    }); 
    
   }, [])
-
+  async function Clean() {
+    await DataStore.clear();
+  }
   function setInput(key, value) {
     setFormState({...formState, [key]: value})
     console.log({ ...formState, [key]: value })
   }
-
+ 
+  function setCategoryInput(id) {
+    setInput('categoryID', id)
+    setDropdown(id)
+  }
   
   async function updatedTodo(id, value) { 
-    const original = await DataStore.query(Todo, id);
+    const original = await DataStore.query(TodoItem, id);
     try {
       await DataStore.save(
-        Todo.copyOf(original, (updated) => {
+        TodoItem.copyOf(original, (updated) => {
           updated.status = value
         })
         )
@@ -55,7 +64,7 @@ const App = ({ signOut, user }) => {
 
   async function removeToDo(todo) {
     try { 
-      const todelete = await DataStore.query(Todo, todo.id);
+      const todelete = await DataStore.query(TodoItem, todo.id);
       DataStore.delete(todelete);
     }
     catch (error) {
@@ -68,13 +77,13 @@ const App = ({ signOut, user }) => {
     
     if (param == 'all') {
       try {
-        const todos = await DataStore.query(Todo);
+        const todos = await DataStore.query(TodoItem);
         setTodos(todos)
       } catch (err) { console.log('error fetching todos') }
     }
     else  {
       try {
-        const todos = await DataStore.query(Todo, c => c.status.eq(param));
+        const todos = await DataStore.query(TodoItem, c => c.status.eq(param));
         setTodos(todos)
       } catch (err) { console.log('error fetching todos') }
     }
@@ -83,24 +92,23 @@ const App = ({ signOut, user }) => {
   async function sortListByCategories(param) {
     if (param == 'all') {
       try {
-        const todos = await DataStore.query(Todo);
+        const todos = await DataStore.query(TodoItem);
         setTodos(todos)
       } catch (err) { console.log('error fetching todos') }
     }
     else {
     try {
-      const todos = await DataStore.query(Todo, c => c.categoryID.eq(param));
+      const todos = await DataStore.query(TodoItem, c => c.categoryID.eq(param));
       setTodos(todos)
     } catch (err) { console.log('error fetching todos') }
   }
   }
   
   async function addTodo() {
+    setDropdown('- - -')
     if (!formState.categoryID) return
     const category = await DataStore.query(Category, formState.categoryID);
-   
     let newTodo;
-
     try { 
       if (!formState.name || !formState.description) return
       const todo = { ...formState }
@@ -108,8 +116,9 @@ const App = ({ signOut, user }) => {
       setTodos([...todos, todo])
       
       newTodo = await DataStore.save(
-        new Todo(todo) 
+        new TodoItem(todo) 
       );
+      setFormState(initialState)
     } catch (error) {
       console.log(error);
     }
@@ -121,13 +130,14 @@ const App = ({ signOut, user }) => {
           updated.todo = newTodo
         })
       )
+      setCategoryState(initCategories)
     }
     catch(e) {
         console.log(e)
       }
     
-    setFormState(initialState);
-    setCategoryState(initCategories);
+   
+    
     
   }
   
@@ -139,14 +149,15 @@ const App = ({ signOut, user }) => {
       await DataStore.save(
         new Category(category) 
       );
-      setCategoryState(initCategories);
+      
     } catch (error) {
       console.log(error);
     }
+    setCategoryState(initCategories);
   }
 
   return (
-    <Flex direction="column" gap="m" wrap='wrap'> 
+    <Flex direction="column" margin='auto' gap="m" wrap='wrap' maxWidth='1440px'> 
   <Flex direction="row" gap="xs" wrap='wrap'>
   <Heading level={3}>Hello, {user.username}!</Heading>
   <Button variation="primary" onClick={signOut}>Sign out</Button>
@@ -161,21 +172,24 @@ const App = ({ signOut, user }) => {
     placeholder="Name"
     onChange={e => setInput('name', e.target.value)}
     defaultValue={formState.name}
+    value={formState.name}
   />
   <TextField
     placeholder="Description"
     onChange={e => setInput('description', e.target.value)}
     defaultValue={formState.description}
+    value={formState.description}
   />
 {categories.length > 0 ? (
           <SelectField
             label="Category"
             labelHidden
-            onChange={e => setInput('categoryID', e.target.value)}
+            onChange={e => setCategoryInput(e.target.value)}
+            value={categoryDropdown}
           >
             <option id='' value=''>- - -</option>{
             categories.map((category, index) => (
-            <option key={index} id={category.name} value={category.id}>{category.name}</option>
+            <option onChange={e => setDropdown(e.target.value)} key={index} id={category.name} value={category.id}>{category.name}</option>
             ))
           } 
           </SelectField>
@@ -189,6 +203,7 @@ const App = ({ signOut, user }) => {
   <Flex direction="column" gap="xs" justifyContent='flex-start'>
   <TextField
     placeholder="Category"
+    value={categoryState.name}
     onChange={e => setCategoryState({name: e.target.value})}
     defaultValue={categoryState.name}
   />

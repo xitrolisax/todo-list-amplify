@@ -16,7 +16,7 @@
           "resolutionStrategy": {
             "type": "OPTIMISTIC_CONCURRENCY"
           },
-          "entityName": "Todo"
+          "entityName": "TodoItem"
         },
         {
           "resolutionStrategy": {

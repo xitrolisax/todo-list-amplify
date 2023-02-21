@@ -1,7 +1,7 @@
 export const schema = {
     "models": {
-        "Todo": {
-            "name": "Todo",
+        "TodoItem": {
+            "name": "TodoItem",
             "fields": {
                 "id": {
                     "name": "id",
@@ -21,7 +21,7 @@ export const schema = {
                     "name": "description",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "status": {
@@ -73,7 +73,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Todos",
+            "pluralName": "TodoItems",
             "attributes": [
                 {
                     "type": "model",
@@ -112,7 +112,7 @@ export const schema = {
                     "name": "todo",
                     "isArray": true,
                     "type": {
-                        "model": "Todo"
+                        "model": "TodoItem"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -162,5 +162,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.3.5",
-    "version": "98dbeb18951789e8dd8603b1ff92242b"
+    "version": "fbd98fced9f6d604124942c48b69be21"
 };

@@ -9,14 +9,14 @@ export enum TodoStatus {
 
 
 
-type EagerTodo = {
+type EagerTodoItem = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Todo, 'id'>;
+    identifier: ManagedIdentifier<TodoItem, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
   readonly name: string;
-  readonly description?: string | null;
+  readonly description: string;
   readonly status: TodoStatus | keyof typeof TodoStatus;
   readonly categoryID: string;
   readonly category: Category;
@@ -24,14 +24,14 @@ type EagerTodo = {
   readonly updatedAt?: string | null;
 }
 
-type LazyTodo = {
+type LazyTodoItem = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Todo, 'id'>;
+    identifier: ManagedIdentifier<TodoItem, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
   readonly name: string;
-  readonly description?: string | null;
+  readonly description: string;
   readonly status: TodoStatus | keyof typeof TodoStatus;
   readonly categoryID: string;
   readonly category: AsyncItem<Category>;
@@ -39,10 +39,10 @@ type LazyTodo = {
   readonly updatedAt?: string | null;
 }
 
-export declare type Todo = LazyLoading extends LazyLoadingDisabled ? EagerTodo : LazyTodo
+export declare type TodoItem = LazyLoading extends LazyLoadingDisabled ? EagerTodoItem : LazyTodoItem
 
-export declare const Todo: (new (init: ModelInit<Todo>) => Todo) & {
-  copyOf(source: Todo, mutator: (draft: MutableModel<Todo>) => MutableModel<Todo> | void): Todo;
+export declare const TodoItem: (new (init: ModelInit<TodoItem>) => TodoItem) & {
+  copyOf(source: TodoItem, mutator: (draft: MutableModel<TodoItem>) => MutableModel<TodoItem> | void): TodoItem;
 }
 
 type EagerCategory = {
@@ -52,7 +52,7 @@ type EagerCategory = {
   };
   readonly id: string;
   readonly name: string;
-  readonly todo?: (Todo | null)[] | null;
+  readonly todo?: (TodoItem | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -64,7 +64,7 @@ type LazyCategory = {
   };
   readonly id: string;
   readonly name: string;
-  readonly todo: AsyncCollection<Todo>;
+  readonly todo: AsyncCollection<TodoItem>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

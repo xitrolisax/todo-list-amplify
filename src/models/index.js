@@ -7,10 +7,10 @@ const TodoStatus = {
   "UNFINISHED": "UNFINISHED"
 };
 
-const { Todo, Category } = initSchema(schema);
+const { TodoItem, Category } = initSchema(schema);
 
 export {
-  Todo,
+  TodoItem,
   Category,
   TodoStatus
 };

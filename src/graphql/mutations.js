@@ -1,12 +1,12 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createTodo = /* GraphQL */ `
-  mutation CreateTodo(
-    $input: CreateTodoInput!
-    $condition: ModelTodoConditionInput
+export const createTodoItem = /* GraphQL */ `
+  mutation CreateTodoItem(
+    $input: CreateTodoItemInput!
+    $condition: ModelTodoItemConditionInput
   ) {
-    createTodo(input: $input, condition: $condition) {
+    createTodoItem(input: $input, condition: $condition) {
       id
       name
       description
@@ -29,12 +29,12 @@ export const createTodo = /* GraphQL */ `
     }
   }
 `;
-export const updateTodo = /* GraphQL */ `
-  mutation UpdateTodo(
-    $input: UpdateTodoInput!
-    $condition: ModelTodoConditionInput
+export const updateTodoItem = /* GraphQL */ `
+  mutation UpdateTodoItem(
+    $input: UpdateTodoItemInput!
+    $condition: ModelTodoItemConditionInput
   ) {
-    updateTodo(input: $input, condition: $condition) {
+    updateTodoItem(input: $input, condition: $condition) {
       id
       name
       description
@@ -57,12 +57,12 @@ export const updateTodo = /* GraphQL */ `
     }
   }
 `;
-export const deleteTodo = /* GraphQL */ `
-  mutation DeleteTodo(
-    $input: DeleteTodoInput!
-    $condition: ModelTodoConditionInput
+export const deleteTodoItem = /* GraphQL */ `
+  mutation DeleteTodoItem(
+    $input: DeleteTodoItemInput!
+    $condition: ModelTodoItemConditionInput
   ) {
-    deleteTodo(input: $input, condition: $condition) {
+    deleteTodoItem(input: $input, condition: $condition) {
       id
       name
       description

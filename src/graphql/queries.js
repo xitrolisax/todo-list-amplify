@@ -1,9 +1,9 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getTodo = /* GraphQL */ `
-  query GetTodo($id: ID!) {
-    getTodo(id: $id) {
+export const getTodoItem = /* GraphQL */ `
+  query GetTodoItem($id: ID!) {
+    getTodoItem(id: $id) {
       id
       name
       description
@@ -26,13 +26,13 @@ export const getTodo = /* GraphQL */ `
     }
   }
 `;
-export const listTodos = /* GraphQL */ `
-  query ListTodos(
-    $filter: ModelTodoFilterInput
+export const listTodoItems = /* GraphQL */ `
+  query ListTodoItems(
+    $filter: ModelTodoItemFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listTodos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listTodoItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         name
@@ -50,14 +50,14 @@ export const listTodos = /* GraphQL */ `
     }
   }
 `;
-export const syncTodos = /* GraphQL */ `
-  query SyncTodos(
-    $filter: ModelTodoFilterInput
+export const syncTodoItems = /* GraphQL */ `
+  query SyncTodoItems(
+    $filter: ModelTodoItemFilterInput
     $limit: Int
     $nextToken: String
     $lastSync: AWSTimestamp
   ) {
-    syncTodos(
+    syncTodoItems(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
@@ -145,16 +145,16 @@ export const syncCategories = /* GraphQL */ `
     }
   }
 `;
-export const todosByCategoryIDAndId = /* GraphQL */ `
-  query TodosByCategoryIDAndId(
+export const todoItemsByCategoryIDAndId = /* GraphQL */ `
+  query TodoItemsByCategoryIDAndId(
     $categoryID: ID!
     $id: ModelIDKeyConditionInput
     $sortDirection: ModelSortDirection
-    $filter: ModelTodoFilterInput
+    $filter: ModelTodoItemFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    todosByCategoryIDAndId(
+    todoItemsByCategoryIDAndId(
       categoryID: $categoryID
       id: $id
       sortDirection: $sortDirection
